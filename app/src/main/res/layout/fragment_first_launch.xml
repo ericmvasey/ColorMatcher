@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="apotheosis.colormatcher.first_launch">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/first_launch_text"
+        android:layout_height="wrap_content"
+        android:fontFamily="Arial"
+        android:textSize="14pt"
+        android:gravity="center_horizontal"
+        android:paddingTop="40dp"
+        android:text="@string/first_launch_text" />
+
+    <Button
+        android:id="@+id/confirm_first_launch"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:textSize="18pt"
+        android:onClick="loadImageCapture"
+        android:background="@color/primary"
+        android:text="@string/confirm_first_launch"/>
+
+</RelativeLayout>

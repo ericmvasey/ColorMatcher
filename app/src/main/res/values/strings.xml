@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Color Matcher</string>
+    <string name="outfit_list_name">Saved Outfits</string>
+    <string name="first_launch_text">Center the article of clothing in the camera\n
+        Take a picture\n
+        Enjoy!</string>
+    <string name="confirm_first_launch">Got it!</string>
+    <string name="detected_color">Detected Color</string>
+    <string name="color_matches">Here are some colors that would go with that!</string>
+    <string name="all_matches">All Matches</string>
+    <string name="clothing">Clothing</string>
+    <string name="paint">Paint</string>
+
+    <array name="outfit_types">
+        <item>My Outfits</item>
+        <item>Presets</item>
+    </array>
+
+</resources>
