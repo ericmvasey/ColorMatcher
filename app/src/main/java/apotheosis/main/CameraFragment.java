@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import apotheosis.Environment;
 import apotheosis.colormatcher.R;
@@ -43,8 +44,8 @@ public class CameraFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View root = inflater.inflate(R.layout.fragment_camera, container, false);
-        return root;
+        return inflater.inflate(R.layout.fragment_camera, container, false);
+
     }
 
     @Override
@@ -154,7 +155,7 @@ public class CameraFragment extends Fragment
                                                             Math.round(center.x + (50 * scale)), //right
                                                             Math.round(center.y + (50 * scale))); //bottom
 
-                                                    String rectStr = String.format("Left: %d Top: %d Right: %d Bottom %d", rect.left, rect.top, rect.right, rect.bottom);
+                                                    String rectStr = String.format(Locale.getDefault(), "Left: %d Top: %d Right: %d Bottom %d", rect.left, rect.top, rect.right, rect.bottom);
                                                     Log.d("Picture taken", rectStr);
 
                                                     if (Environment.createImageFromBitmap(bitmapRegionDecoder.decodeRegion(rect, null), getActivity()) == null)

@@ -32,6 +32,11 @@ public class OutfitListAdapter extends BaseAdapter
         return outfits.size();
     }
 
+    public String getOutfitName(int position)
+    {
+        return outfits.get(position).first;
+    }
+
     @Override
     public HSLColor[] getItem(int position)
     {

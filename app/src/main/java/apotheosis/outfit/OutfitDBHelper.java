@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 import android.support.v4.util.Pair;
 
 import java.util.ArrayList;
@@ -23,6 +24,20 @@ public class OutfitDBHelper extends SQLiteOpenHelper
     {
         db.execSQL("CREATE TABLE outfits (type integer, colors TEXT, name TEXT);");
 
+        HSLColor[] outfit = new HSLColor[]{new HSLColor(HSLColor.fromRGB(Color.BLUE)), new HSLColor(Color.GRAY)};
+        db.execSQL("INSERT INTO outfits (type,colors, name) VALUES (0," + hslToString(outfit) + ", '" + "Blue and Gray" + "');");
+
+        outfit = new HSLColor[]{new HSLColor(HSLColor.fromRGB(Color.BLUE)), new HSLColor(Color.WHITE)};
+        db.execSQL("INSERT INTO outfits (type,colors, name) VALUES (0," + hslToString(outfit) + ", '" + "Blue and White" + "');");
+
+        outfit = new HSLColor[]{new HSLColor(Color.rgb(210,180,140)), new HSLColor(Color.rgb(128,0,0))};
+        db.execSQL("INSERT INTO outfits (type,colors, name) VALUES (0," + hslToString(outfit) + ", '" + "Tan and Maroon" + "');");
+
+        outfit = new HSLColor[]{new HSLColor(Color.rgb(255,105,180)), new HSLColor(Color.BLACK)};
+        db.execSQL("INSERT INTO outfits (type,colors, name) VALUES (0," + hslToString(outfit) + ", '" + "Pink and Black" + "');");
+
+        outfit = new HSLColor[]{new HSLColor(Color.rgb(160,32,240)), new HSLColor(Color.rgb(245,245,220))};
+        db.execSQL("INSERT INTO outfits (type,colors, name) VALUES (0," + hslToString(outfit) + ", '" + "Purple and Beige" + "');");
     }
 
     @Override
@@ -98,6 +113,11 @@ public class OutfitDBHelper extends SQLiteOpenHelper
 
     public void addOutfit(String title, HSLColor[] outfit)
     {
+        getWritableDatabase().execSQL("INSERT INTO outfits (type,colors, name) VALUES (1," + hslToString(outfit) + ", '" + title + "');");
+    }
+
+    private String hslToString(HSLColor[] outfit)
+    {
         StringBuilder colors = new StringBuilder("'");
 
         for(HSLColor color: outfit)
@@ -107,7 +127,6 @@ public class OutfitDBHelper extends SQLiteOpenHelper
         }
 
         colors.replace(colors.length()-1,colors.length(),"'");
-
-        getWritableDatabase().execSQL("INSERT INTO outfits (type,colors, name) VALUES (1," + colors.toString() + ", '" + title + "');");
+        return colors.toString();
     }
 }

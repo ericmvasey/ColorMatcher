@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -35,9 +36,10 @@ import apotheosis.outfit.OutfitFragment;
 import apotheosis.views.ColorCardView;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class ResultActivity extends ActionBarActivity
+public class ResultActivity extends AppCompatActivity
 {
     private ActionBarDrawerToggle toggle;
+    private int selectedOutfitType = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -79,8 +81,53 @@ public class ResultActivity extends ActionBarActivity
                     @Override
                     public boolean onNavigationItemSelected(int itemPosition, long itemId)
                     {
+                        selectedOutfitType = itemPosition;
+
                         ListView lv = (ListView) findViewById(R.id.left_drawer_result_activity);
+
+                        lv.setOnItemClickListener(new ListView.OnItemClickListener()
+                        {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                            {
+                                HSLColor[] outfit = ((OutfitListAdapter) parent.getAdapter()).getItem(position);
+                                int[] rgbs = new int[outfit.length];
+                                for(int i = 0; i < outfit.length; i++)
+                                {
+                                    rgbs[i] = outfit[i].getRGB();
+                                }
+
+                                Bundle args = new Bundle();
+                                args.putIntArray("colors", rgbs);
+
+                                OutfitFragment frag = new OutfitFragment();
+                                frag.setArguments(args);
+
+                                DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                boolean isDrawerOpen = drawerLayout.isDrawerOpen(findViewById(R.id.left_drawer_result));
+
+                                if(isDrawerOpen)
+                                    drawerLayout.closeDrawers();
+
+                                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                                getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.resultContainerFragment, frag)
+                                        .addToBackStack(null)
+                                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
+                                                android.R.anim.slide_out_right, android.R.anim.slide_in_left)
+                                        .commit();
+                            }
+                        });
+
                         if(itemPosition == 0)
+                        {
+                            OutfitListAdapter adapter = new OutfitListAdapter(new OutfitDBHelper(ResultActivity.this).getAllPreDefinedOutfits());
+                            lv.setAdapter(adapter);
+                            lv.setOnItemLongClickListener(null);
+                            return true;
+                        }
+                        else if(itemPosition == 1)
                         {
                             OutfitListAdapter adapter = new OutfitListAdapter(new OutfitDBHelper(ResultActivity.this).getAllUserOutfits());
                             lv.setAdapter(adapter);
@@ -121,16 +168,11 @@ public class ResultActivity extends ActionBarActivity
 
                             return true;
                         }
-                        else if(itemPosition == 1)
-                        {
-                            OutfitListAdapter adapter = new OutfitListAdapter(new OutfitDBHelper(ResultActivity.this).getAllPreDefinedOutfits());
-                            lv.setAdapter(adapter);
-                            lv.setOnItemLongClickListener(null);
-                            return true;
-                        }
                         return false;
                     }
                 });
+
+                getSupportActionBar().setSelectedNavigationItem(selectedOutfitType);
             }
 
         };
@@ -150,50 +192,6 @@ public class ResultActivity extends ActionBarActivity
             drawerLayout.closeDrawers();
         else
             super.onBackPressed();
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
-        OutfitListAdapter adapter = new OutfitListAdapter(new OutfitDBHelper(this).getAllUserOutfits());
-        ListView lv = (ListView) findViewById(R.id.left_drawer_result_activity);
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new ListView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                HSLColor[] outfit = ((OutfitListAdapter) parent.getAdapter()).getItem(position);
-                int[] rgbs = new int[outfit.length];
-                for(int i = 0; i < outfit.length; i++)
-                {
-                    rgbs[i] = outfit[i].getRGB();
-                }
-
-                Bundle args = new Bundle();
-                args.putIntArray("colors", rgbs);
-
-                OutfitFragment frag = new OutfitFragment();
-                frag.setArguments(args);
-
-                DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-                boolean isDrawerOpen = drawerLayout.isDrawerOpen(findViewById(R.id.left_drawer_result));
-
-                if(isDrawerOpen)
-                    drawerLayout.closeDrawers();
-
-                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.resultContainerFragment, frag)
-                        .addToBackStack(null)
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                                android.R.anim.slide_out_right, android.R.anim.slide_in_left)
-                        .commit();
-            }
-        });
     }
 
     @Override

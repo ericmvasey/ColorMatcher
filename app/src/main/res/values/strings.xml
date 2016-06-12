@@ -14,8 +14,8 @@
     <string name="paint">Paint</string>
 
     <array name="outfit_types">
-        <item>My Outfits</item>
         <item>Presets</item>
+        <item>My Outfits</item>
     </array>
 
 </resources>
