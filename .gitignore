@@ -1,10 +1,10 @@
-/.gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
+.gradle
+local.properties
+.idea/workspace.xml
+.idea/libraries
 .DS_Store
-/ambilWarna/build
-/app/build
+ambilWarna/build
+app/build
 
 # Built application files
 /*/build/
