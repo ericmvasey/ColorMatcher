@@ -28,24 +28,25 @@ import java.util.List;
 import java.util.Locale;
 
 import apotheosis.Environment;
+import apotheosis.adapters.ImageCallback;
 import apotheosis.colormatcher.R;
 
-@SuppressWarnings("deprecation")
 public class CameraFragment extends Fragment
 {
     private Camera c;
     private CameraPreview preview;
-
-    public CameraFragment()
-    {
-
-    }
+    private ImageCallback imageCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         return inflater.inflate(R.layout.fragment_camera, container, false);
 
+    }
+
+    public void setImageCallback(ImageCallback callback)
+    {
+        this.imageCallback = callback;
     }
 
     @Override
@@ -65,6 +66,7 @@ public class CameraFragment extends Fragment
         {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -74,7 +76,6 @@ public class CameraFragment extends Fragment
         c.stopPreview();
         c.setPreviewCallback(null);
         preview.getHolder().removeCallback(preview);
-        ((FrameLayout) getActivity().findViewById(R.id.cameraView)).removeView(preview);
         c.release();
     }
 
@@ -113,6 +114,10 @@ public class CameraFragment extends Fragment
                     public void onClick(View view)
                     {
                         camera.setPreviewCallback(null);
+                        Camera.Parameters parameters = camera.getParameters();
+                        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                        camera.setParameters(parameters);
+
                         camera.autoFocus(new Camera.AutoFocusCallback()
                         {
                             @Override
@@ -167,7 +172,10 @@ public class CameraFragment extends Fragment
                                                         setWillNotDraw(false);
                                                     }
                                                     else
-                                                        ((Main) getActivity()).onPictureTaken();
+                                                    {
+                                                        if(imageCallback != null)
+                                                            imageCallback.onPictureTaken();
+                                                    }
                                                 }
                                                 catch (Exception e)
                                                 {
@@ -246,7 +254,7 @@ public class CameraFragment extends Fragment
 
             params.setPreviewSize(optimal.width, optimal.height);
             c.setParameters(params);
-            setCameraDisplayOrientation(getActivity(),0,camera);
+            setCameraDisplayOrientation(0,camera);
 
             final float scale = getResources().getDisplayMetrics().density;
             int width = getResources().getDisplayMetrics().widthPixels,
@@ -278,33 +286,21 @@ public class CameraFragment extends Fragment
         }
     }
 
-    public static void setCameraDisplayOrientation(Activity activity,
-        int cameraId, android.hardware.Camera camera)
+    public void setCameraDisplayOrientation(int cameraId, android.hardware.Camera camera)
     {
         android.hardware.Camera.CameraInfo info =
                 new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(cameraId, info);
-        int rotation = activity.getWindowManager().getDefaultDisplay()
-                .getRotation();
-        int degrees = 0;
-
-        switch (rotation)
-        {
-            case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 90; break;
-            case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break;
-        }
 
         int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
         {
-            result = (info.orientation + degrees) % 360;
+            result = (info.orientation) % 360;
             result = (360 - result) % 360;  // compensate the mirror
         }
         else
         {  // back-facing
-            result = (info.orientation - degrees + 360) % 360;
+            result = (info.orientation + 360) % 360;
         }
         camera.setDisplayOrientation(result);
     }

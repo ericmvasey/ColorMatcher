@@ -18,8 +18,6 @@ public class Environment
         MATCH_FILTER_PREFERENCE_CLOTHING = 1,
         MATCH_FILTER_PREFERENCE_PAINT = 2;
 
-    public static final String CRITTERCISM_APP_ID = "54a4c4f951de5e9f042ec704";
-
     public static final int CARD_SIZE_DP = 60;
 
     public static Bitmap drawableToBitmap (Drawable drawable)

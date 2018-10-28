@@ -28,7 +28,7 @@ public class ColorAnalyzer extends AsyncTask<Bitmap, Integer, Integer>
     protected Integer doInBackground(Bitmap... bitmaps)
     {
         Bitmap bitmap = bitmaps[0];
-        int[] pixels = new int[ (bitmap.getHeight() * bitmap.getWidth())];
+        /*int[] pixels = new int[ (bitmap.getHeight() * bitmap.getWidth())];
 
         int redBucket = 0;
         int greenBucket = 0;
@@ -47,7 +47,12 @@ public class ColorAnalyzer extends AsyncTask<Bitmap, Integer, Integer>
 
         return Color.rgb( redBucket/pixelCount,
                 greenBucket/pixelCount,
-                blueBucket/pixelCount);
+                blueBucket/pixelCount);*/
+
+        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 1, 1, true);
+        final int color = scaled.getPixel(0,0);
+        scaled.recycle();
+        return color;
     }
 
     @Override
