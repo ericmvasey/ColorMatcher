@@ -3,12 +3,12 @@ package apotheosis.colormatcher;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+
+import androidx.cardview.widget.CardView;
 
 import apotheosis.Environment;
 import apotheosis.adapters.ColorHarmoniesAdapter;
